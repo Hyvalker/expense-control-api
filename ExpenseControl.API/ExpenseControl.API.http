@@ -1,0 +1,6 @@
+@ExpenseControl.API_HostAddress = http://localhost:5117
+
+GET {{ExpenseControl.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
