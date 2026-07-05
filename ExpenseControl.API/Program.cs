@@ -1,4 +1,22 @@
+using ExpenseControl.Core.Interfaces;
+using ExpenseControl.Infrastructure.Data;
+using ExpenseControl.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuração do DbContext com SQLite
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+
+// Registro dos Repositórios (Injeção de Dependência)
+// O AddScoped garante uma única instância por requisição HTTP
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
