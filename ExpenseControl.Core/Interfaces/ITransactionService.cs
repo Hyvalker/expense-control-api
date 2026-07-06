@@ -1,4 +1,5 @@
 using ExpenseControl.Core.Entities;
+using ExpenseControl.Core.Models;
 
 namespace ExpenseControl.Core.Interfaces;
 
@@ -18,4 +19,9 @@ public interface ITransactionService
     /// Lista todas as transações cadastradas.
     /// </summary>
     Task<IEnumerable<Transaction>> GetAllAsync();
+    
+    /// <summary>
+    /// Busca o relatório total de gastos e despesas.
+    /// </summary>
+    Task<ReportModel> GetReportAsync();
 }

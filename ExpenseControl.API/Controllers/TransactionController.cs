@@ -87,5 +87,22 @@ public class TransactionController : ControllerBase
         // Retorna a lista com os DTOs de resposta.
         return Ok(response);
     }
+
+    [HttpGet("report")]
+    public async Task<ActionResult<ReportResponse>> GetReport()
+    {
+        // Chama a regra de negócios para o relatório através de TransactionService
+        var model = await _transactionService.GetReportAsync();
+        
+        // Mapeia o modelo interno para o contrato da API
+        var response = new ReportResponse(
+            model.PeopleReport.Select(p => new PersonReport(p.Name, p.TotalIncome, p.TotalExpense, p.Balance)),
+            model.TotalGeneralIncome,
+            model.TotalGeneralExpense,
+            model.TotalGeneralBalance
+        );
+        
+        return Ok(response);
+    }
     
 }
