@@ -7,19 +7,23 @@ namespace ExpenseControl.Core.Interfaces;
 /// </summary>
 public interface IPersonRepository
 {
-        /// <summary>
-        /// Adiciona uma nova pessoa ao sistema.
-        /// </summary>
-        Task AddAsync(Person person);
-        
-        /// <summary>
-        /// Busca uma pessoa pelo seu identificador único (Id).
-        /// </summary>
-        Task<Person?> GetByIdAsync(int id);
-        
-        /// <summary>
-        /// Retorna todas as pessoas cadastradas no sistema.
-        /// </summary>
-        Task<IEnumerable<Person>> GetAllAsync();
-    
+    /// <summary>
+    /// Adiciona uma nova pessoa ao sistema.
+    /// </summary>
+    Task AddAsync(Person person);
+
+    /// <summary>
+    /// Busca uma pessoa pelo seu identificador único (Id).
+    /// </summary>
+    Task<Person?> GetByIdAsync(int id);
+
+    /// <summary>
+    /// Retorna todas as pessoas cadastradas no sistema.
+    /// </summary>
+    Task<IEnumerable<Person>> GetAllAsync();
+
+    /// <summary>
+    /// Deleta uma pessoa cadastrada no sistema
+    /// </summary>
+    Task DeleteAsync(Person person);
 }

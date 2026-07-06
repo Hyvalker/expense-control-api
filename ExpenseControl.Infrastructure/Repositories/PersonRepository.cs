@@ -42,4 +42,13 @@ public class PersonRepository : IPersonRepository
     {
         return await _context.People.ToListAsync();
     }
+
+    /// <summary>
+    /// Deleta uma pessoa do banco de dados
+    /// </summary>
+    public async Task DeleteAsync(Person person)
+    {
+        _context.People.Remove(person);
+        await _context.SaveChangesAsync();
+    }
 }
