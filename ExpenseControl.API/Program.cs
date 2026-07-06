@@ -1,4 +1,5 @@
 using ExpenseControl.Core.Interfaces;
+using ExpenseControl.Core.Services;
 using ExpenseControl.Infrastructure.Data;
 using ExpenseControl.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connect
 // O AddScoped garante uma única instância por requisição HTTP
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

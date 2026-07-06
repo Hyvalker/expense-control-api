@@ -17,8 +17,4 @@
       <ProjectReference Include="..\ExpenseControl.Infrastructure\ExpenseControl.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
 </Project>
