@@ -19,7 +19,7 @@ public class TransactionService : ITransactionService
     public async Task<Transaction> CreateAsync(Transaction transaction)
     {
         var person = await _personRepository.GetByIdAsync(transaction.PersonId);
-        
+
         // Verifica se a pessoa existe no banco de dados
         if (person == null)
             throw new Exception("Pessoa não encontrada.");
@@ -27,7 +27,7 @@ public class TransactionService : ITransactionService
         // Define que menores de 18 anos só possam cadastrar despesas.
         if (person.Age < 18 && transaction.Type == TransactionType.Income)
             throw new InvalidOperationException("Menores de 18 anos não podem registrar receita.");
-        
+
         await _transactionRepository.AddAsync(transaction);
         return transaction;
     }
@@ -54,10 +54,22 @@ public class TransactionService : ITransactionService
             var exp = pTransactions.Where(t => t.Type == TransactionType.Expense).Sum(t => t.Amount);
             return new PersonReportModel(p.Name, inc, exp, inc - exp);
         }).ToList();
-        
+
         var totalInc = peopleReport.Sum(r => r.TotalIncome);
         var totalExp = peopleReport.Sum(r => r.TotalExpense);
-        
+
         return new ReportModel(peopleReport, totalInc, totalExp, totalInc - totalExp);
+    }
+
+    public async Task<IEnumerable<Transaction>> GetByPersonIdAsync(int personId)
+    {
+        // Valida se a pessoa existe no banco de dados.
+        var person = await _personRepository.GetByIdAsync(personId);
+        if (person == null)
+            throw new KeyNotFoundException("Pessoa não encontrada no sistema.");
+
+        // Se existe, busca as transações.
+        var all = await _transactionRepository.GetAllAsync();
+        return all.Where(t => t.PersonId == person.Id);
     }
 }
