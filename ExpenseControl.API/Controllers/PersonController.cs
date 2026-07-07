@@ -14,8 +14,11 @@ public class PersonController : ControllerBase
     {
         _personService = personService;
     }
-
+    
+    
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PersonResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<PersonResponse>> Create(CreatePersonRequest request)
     {
         // Instancia a entidade do tipo Person com os dados do construtor do DTO.
@@ -37,6 +40,8 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PersonResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<PersonResponse>> Get(int id)
     {
         // Busca a pessoa no banco de dados através do identificador único.
@@ -55,6 +60,7 @@ public class PersonController : ControllerBase
     }
     
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PersonResponse>))]
     public async Task<ActionResult<IEnumerable<PersonResponse>>> GetAll()
     {
         // Busca a entidade 
@@ -68,6 +74,8 @@ public class PersonController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
 

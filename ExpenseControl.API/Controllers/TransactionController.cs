@@ -17,6 +17,9 @@ public class TransactionController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TransactionResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TransactionResponse>> Create(CreateTransactionRequest request)
     {
         
@@ -52,6 +55,8 @@ public class TransactionController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TransactionResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TransactionResponse>> Get(int id)
     {
         // Busca a transação no banco de dados através do identificador único.
@@ -73,22 +78,9 @@ public class TransactionController : ControllerBase
 
         return Ok(response);
     }
-
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<TransactionResponse>>> GetAll()
-    {
-        // Busca a entidade 
-        var transactions = await _transactionService.GetAllAsync();
-        
-        // Usa o LINQ para transformar cada Transaction em TransactionResponse.
-        var response = transactions.Select(t => new TransactionResponse(
-            t.Id, t.Description, t.Amount, t.Type, t.PersonId));
-        
-        // Retorna a lista com os DTOs de resposta.
-        return Ok(response);
-    }
-
+    
     [HttpGet("report")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ReportResponse))]
     public async Task<ActionResult<ReportResponse>> GetReport()
     {
         // Chama a regra de negócios para o relatório através de TransactionService
@@ -103,6 +95,39 @@ public class TransactionController : ControllerBase
         );
         
         return Ok(response);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TransactionResponse>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<TransactionResponse>>> GetAll([FromQuery] int? personId)
+    {
+        try
+        {
+            IEnumerable<Transaction> transactions;
+
+            if (personId.HasValue)
+            {
+                transactions = await _transactionService.GetByPersonIdAsync(personId.Value);
+            }
+            else
+            {
+                transactions = await _transactionService.GetAllAsync();
+            }
+
+            var response = transactions.Select(t => new TransactionResponse(
+                t.Id,
+                t.Description,
+                t.Amount,
+                t.Type,
+                t.PersonId));
+            return Ok(response);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+        
     }
     
 }
