@@ -1,10 +1,15 @@
-import { api } from './axios';
-import { type Person} from "../types/models.ts";
+import {api} from './axios';
+import {type Person} from "../types/models.ts";
 
 export const personService = {
-    
+
     async getAll(): Promise<Person[]> {
         const response = await api.get<Person[]>('/people');
+        return response.data;
+    },
+
+    async getById(id: number): Promise<Person> {
+        const response = await api.get<Person>(`/people/${id}`);
         return response.data;
     },
     

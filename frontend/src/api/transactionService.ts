@@ -14,8 +14,13 @@ export const transactionService = {
         }));
     },
     
-    async create (data: Omit<Transaction, 'id'>) {
+    async create (data: Omit<Transaction, 'id' | 'personName'>) {
         
-        return await api.post('/transactions', data);
+        const payload = {
+            ...data,
+            type: BACKEND_TYPE_MAP[data.type]
+        }
+        
+        return await api.post('/transactions', payload);
     }
 }
