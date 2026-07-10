@@ -69,7 +69,6 @@ public class TransactionService : ITransactionService
             throw new KeyNotFoundException("Pessoa não encontrada no sistema.");
 
         // Se existe, busca as transações.
-        var all = await _transactionRepository.GetAllAsync();
-        return all.Where(t => t.PersonId == person.Id);
+        return await _transactionRepository.GetByPersonIdAsync(personId);
     }
 }

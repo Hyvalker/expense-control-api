@@ -40,7 +40,9 @@ public class TransactionRepository : ITransactionRepository
     /// </summary>
     public async Task<IEnumerable<Transaction>> GetAllAsync()
     {
-        return await _context.Transactions.ToListAsync();
+        return await _context.Transactions
+            .Include(t => t.Person)
+            .ToListAsync();
     }
 
     /// <summary>
@@ -48,6 +50,9 @@ public class TransactionRepository : ITransactionRepository
     /// </summary>
     public async Task<IEnumerable<Transaction>> GetByPersonIdAsync(int personId)
     {
-        return await _context.Transactions.Where(x => x.PersonId == personId).AsNoTracking().ToListAsync();
+        return await _context.Transactions
+            .Include(t => t.Person)
+            .Where(x => x.PersonId == personId).AsNoTracking().ToListAsync();
     }
+    
 }

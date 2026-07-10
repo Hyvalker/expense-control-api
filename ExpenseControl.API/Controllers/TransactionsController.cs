@@ -7,11 +7,11 @@ namespace ExpenseControl.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TransactionController : ControllerBase
+public class TransactionsController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
 
-    public TransactionController(ITransactionService transactionService)
+    public TransactionsController(ITransactionService transactionService)
     {
         _transactionService = transactionService;
     }
@@ -47,7 +47,8 @@ public class TransactionController : ControllerBase
             transaction.Description, 
             transaction.Amount,
             transaction.Type, 
-            transaction.PersonId);
+            transaction.PersonId,
+            transaction.Person?.Name ?? "Sem Nome");
 
         // Retorna o status 201 (Created).
         // O CreatedAtAction retorna a URL para buscar a transação criada.
@@ -74,7 +75,8 @@ public class TransactionController : ControllerBase
             transaction.Description, 
             transaction.Amount,
             transaction.Type, 
-            transaction.PersonId);
+            transaction.PersonId,
+            transaction.Person?.Name ?? "Sem Nome");
 
         return Ok(response);
     }
@@ -120,7 +122,8 @@ public class TransactionController : ControllerBase
                 t.Description,
                 t.Amount,
                 t.Type,
-                t.PersonId));
+                t.PersonId,
+                t.Person?.Name ?? "Sem Nome"));
             return Ok(response);
         }
         catch (KeyNotFoundException)
@@ -129,5 +132,4 @@ public class TransactionController : ControllerBase
         }
         
     }
-    
 }
