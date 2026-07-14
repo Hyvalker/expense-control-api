@@ -3,10 +3,20 @@ import {personService} from '../../api/personService';
 import {transactionService} from '../../api/transactionService';
 import {type Person} from '../../types/models';
 
+/**
+ * Propriedades esperadas pelo componente TransactionForm.
+ */
 interface TransactionFormProps {
+    /** Callback executado após o sucesso do salvamento. */
     onSuccess: () => void;
+    /** Callback executado ao clicar no botão cancelar. */
     onCancel: () => void;
 }
+
+/**
+ * Formulário para criação de novas transações financeiras.
+ * Carrega dinamicamente a lista de pessoas disponíveis e gerencia o envio do formulário.
+ */
 
 export const TransactionForm = ({onSuccess, onCancel}: TransactionFormProps) => {
     const [people, setPeople] = useState<Person[]>([]);
@@ -14,12 +24,18 @@ export const TransactionForm = ({onSuccess, onCancel}: TransactionFormProps) => 
     const [amount, setAmount] = useState('');
     const [type, setType] = useState('Income');
     const [personId, setPersonId] = useState('');
+    /** Mensagem de feedback exibida após a tentativa de cadastro. */
     const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' } | null>(null);
 
+    // Carrega a lista de pessoas ao montar o componente para preencher o select.
     useEffect(() => {
         personService.getAll().then(setPeople);
     }, []);
 
+    /**
+     * Manipula o envio do formulário, processa os dados e chama o serviço de transação.
+     * @param e
+     */
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         setMessage(null);
@@ -34,6 +50,7 @@ export const TransactionForm = ({onSuccess, onCancel}: TransactionFormProps) => 
 
             setMessage({text: "Transação cadastrada com sucesso!", type: 'success'});
 
+            // Aguarda 1.5 segundos para o usuário ler a mensagem de sucesso antes de fechar o formulário.
             setTimeout(() => {
                 onSuccess();
             }, 1500);

@@ -1,20 +1,34 @@
 import { useState } from "react";
 import { personService } from "../../api/personService";
 
+/**
+ * Propriedades esperadas pelo componente PersonForm.
+ */
 interface PersonFormProps {
+    /** Callback executado após sucesso do cadastro, ideal para atualizar listagens. */
     onSuccess: () => void;
 }
 
+/**
+ * Formulário para cadastro de novas pessoas.
+ * Gerencia o estado dos inputs, validações básicas e integração com a API.
+ * 
+ * @param onSuccess - Função chamada após a criação bem-sucedida da pessoa.
+ */
 export const PersonForm = ({ onSuccess }: PersonFormProps) => {
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
+    /** Estado para mensagens de feedback (sucesso ou erro) exibidas no formulário. */
     const [message, setMessage] = useState<{ text: string, type: 'success' | 'error' } | null>(null);
 
+    /**
+     * Manipula o envio do formulário, realiza as validações e envia os dados para a API.
+     */
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         setMessage(null);
 
-        // Validações
+        // Validações locais antes de enviar.
         if (name.trim() === '') {
             setMessage({ text: "O nome é obrigatório.", type: 'error' });
             return;
@@ -28,10 +42,12 @@ export const PersonForm = ({ onSuccess }: PersonFormProps) => {
         try {
             await personService.create({ name, age: ageNum });
             setMessage({ text: "Pessoa cadastrada com sucesso!", type: 'success' });
+            // Limpa o formulário após o sucesso.
             setName('');
             setAge('');
             onSuccess(); 
         } catch (err: any) {
+            // Tenta extrair a mensagem de erro da API, se disponível.
             const errorData = err.response?.data;
             setMessage({ text: errorData?.Message || "Erro ao salvar pessoa.", type: 'error' });
         }

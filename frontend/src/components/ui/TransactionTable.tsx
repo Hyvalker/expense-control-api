@@ -1,11 +1,23 @@
 import { type Transaction } from '../../types/models';
 import { Button } from './Button';
 
+/**
+ * Propriedades esperadas pelo componente TransactionTable.
+ */
 interface TransactionTableProps {
+    /** Lista de transações a serem exibidas na tabela.*/
     transactions: Transaction[];
+    /** Callback opcional para exclusão de uma transação pelo seu ID.*/
     onDelete?: (id: number) => void;
 }
 
+/**
+ * Componente de tabela para exibição de transações financeiras.
+ * Formata os valores monetários e diferencia visualmente as receitas de despesas.
+ * 
+ * @param transactions - Array de objetos de transação.
+ * @param onDelete - Função chamada ao clicar no botão de excluir.
+ */
 export const TransactionTable = ({ transactions, onDelete }: TransactionTableProps) => {
     return (
         <div className="overflow-x-auto">

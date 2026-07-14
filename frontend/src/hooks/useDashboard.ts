@@ -2,14 +2,21 @@ import { useState, useEffect } from 'react';
 import { transactionService } from '../api/transactionService';
 import { personService } from '../api/personService'; 
 import { type Transaction } from '../types/models';
-import { type Person } from '../types/models'; 
+import { type Person } from '../types/models';
 
+/**
+ * Hook para gerenciar os dados do dashboard.
+ * Realiza o fetch unificado de transações e pessoas, gerencia o estado de carregamento e calcula os totais financeiros
+ * (receitas, despesas e saldo).
+ */
 export const useDashboard = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [people, setPeople] = useState<Person[]>([]); 
     const [loading, setLoading] = useState(true);
+    /** Gatilho para forçar a atualização dos dados da API. */
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+    // Carrega os dados sempre que o componente for montado ou o trigger for alterado.
     useEffect(() => {
         setLoading(true);
         Promise.all([
@@ -22,6 +29,7 @@ export const useDashboard = () => {
         });
     }, [refreshTrigger]);
 
+    /** Função para forçar a atualização dos dados da tela. */
     const refresh = () => setRefreshTrigger(prev => prev + 1);
 
     // Lógica de negócio: Cálculo de totais

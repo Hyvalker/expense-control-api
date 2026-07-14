@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { personService } from "../api/personService";
 import { type Person } from '../types/models';
-import { PersonForm } from "../components/ui/PersonForm"; 
+import { PersonForm } from "../components/ui/PersonForm";
 
+/**
+ * Página de gerenciamento de pessoas.
+ * Responsável por listar, cadastrar e excluir pessoas do sistema.
+ */
 export const PeoplePage = () => {
     const [people, setPeople] = useState<Person[]>([]);
 
@@ -10,11 +14,19 @@ export const PeoplePage = () => {
         loadPeople();
     }, []);
 
+    /**
+     * Busca a lista atualizada de pessoas no servidor e atualiza o estado local.
+     */
     const loadPeople = async () => {
         const data = await personService.getAll();
         setPeople(data);
     };
 
+    /**
+     * Remove uma pessoa após confirmação do usuário e atualiza a listagem.
+     * OBS: Todas as transações dessa pessoa são removidas junto com ela.
+     * @param id - O identificador da pessoa a ser removida
+     */
     const handleDelete = async (id: number) => {
         if (confirm(`Tem certeza? Isso apagará todas as transações desta pessoa!`)) {
             await personService.delete(id);
