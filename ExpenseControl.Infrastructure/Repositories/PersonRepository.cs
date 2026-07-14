@@ -30,21 +30,23 @@ public class PersonRepository : IPersonRepository
     /// <summary>
     /// Busca uma pessoa específica no banco de dados através de seu identificador único.
     /// </summary>
+    /// <returns>A entidade encontrada ou null caso nao exista.</returns>>
     public async Task<Person?> GetByIdAsync(int id)
     {
         return await _context.People.FindAsync(id);
     }
 
     /// <summary>
-    /// Busca todas as pessoas registradas no banco de dados e às retorna em uma lista.
+    /// Busca todas as pessoas registradas no banco de dados.
     /// </summary>
     public async Task<IEnumerable<Person>> GetAllAsync()
     {
+        // ToListAsync garante que a consulta seja executada de forma assíncrona
         return await _context.People.ToListAsync();
     }
 
     /// <summary>
-    /// Deleta uma pessoa do banco de dados
+    /// Remove uma pessoa do banco de dados e confirma a transação.
     /// </summary>
     public async Task DeleteAsync(Person person)
     {

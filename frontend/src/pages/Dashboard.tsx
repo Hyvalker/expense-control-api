@@ -2,16 +2,14 @@ import { useState } from 'react';
 import { useDashboard } from '../hooks/useDashboard';
 import { Card } from '../components/ui/Card';
 import { TransactionTable } from '../components/ui/TransactionTable';
+import { transactionService } from '../api/transactionService';
 
 export const Dashboard = () => {
-    const { loading, totals, balance, people, transactions } = useDashboard();
-
-  
+    const { loading, totals, balance, people, transactions, refresh } = useDashboard();
     const [view, setView] = useState<'summary' | 'report' | 'person' | 'transactions'>('summary');
     const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
 
-   
     const changeView = (newView: typeof view) => {
         setView(newView);
         setSelectedPersonId(null);
@@ -20,11 +18,22 @@ export const Dashboard = () => {
 
     if (loading) return <div>Carregando...</div>;
 
+    const handleDelete = async (id: number) => {
+        if (confirm("Deseja excluir esta transação?")) {
+            try {
+                await transactionService.delete(id);
+                refresh();
+            } catch (error) {
+                console.error("Erro ao excluir.", error);
+                alert("Não foi possível excluir a transação.");
+            }
+        }
+    };
+
     return (
         <div className="p-8 max-w-6xl mx-auto">
             <h1 className="text-2xl font-bold mb-6 text-gray-800">Painel de Controle</h1>
 
-            {/* MENU DE ABAS */}
             <div className="flex gap-4 mb-8">
                 <button onClick={() => changeView('summary')} className={`px-4 py-2 rounded ${view === 'summary' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Visão Geral</button>
                 <button onClick={() => changeView('report')} className={`px-4 py-2 rounded ${view === 'report' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Consulta de Totais</button>
@@ -32,7 +41,6 @@ export const Dashboard = () => {
                 <button onClick={() => changeView('transactions')} className={`px-4 py-2 rounded ${view === 'transactions' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Listar Transações</button>
             </div>
 
-            {/* VISÃO GERAL */}
             {view === 'summary' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Card title="Receitas Totais" value={`R$ ${totals.income.toFixed(2)}`} color="green"/>
@@ -41,7 +49,6 @@ export const Dashboard = () => {
                 </div>
             )}
 
-            {/* CONSULTA DE TOTAIS */}
             {view === 'report' && (
                 <table className="w-full border-collapse bg-white shadow-md">
                     <thead>
@@ -69,18 +76,9 @@ export const Dashboard = () => {
                         );
                     })}
                     </tbody>
-                    <tfoot className="bg-gray-200 font-bold">
-                    <tr>
-                        <td className="p-3" colSpan={2}>TOTAL GERAL</td>
-                        <td className="p-3 text-right text-green-700">R$ {totals.income.toFixed(2)}</td>
-                        <td className="p-3 text-right text-red-700">R$ {totals.expense.toFixed(2)}</td>
-                        <td className="p-3 text-right text-blue-700">R$ {balance.toFixed(2)}</td>
-                    </tr>
-                    </tfoot>
                 </table>
             )}
 
-            {/* BUSCAR PESSOA */}
             {view === 'person' && (
                 <div className="bg-white p-6 border rounded shadow">
                     <h2 className="text-xl font-bold mb-4">Buscar Pessoa por Nome</h2>
@@ -93,32 +91,32 @@ export const Dashboard = () => {
                     />
                     {searchTerm && (
                         <div className="mb-6 border rounded">
-                            {people
-                                .filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                                .map(p => (
-                                    <button key={p.id} className="block w-full text-left p-2 hover:bg-blue-50 border-b" onClick={() => setSelectedPersonId(p.id)}>
-                                        {p.name} ({p.age} anos)
-                                    </button>
-                                ))}
+                            {people.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase())).map(p => (
+                                <button key={p.id} className="block w-full text-left p-2 hover:bg-blue-50 border-b" onClick={() => setSelectedPersonId(p.id)}>
+                                    {p.name} 
+                                </button>
+                            ))}
                         </div>
                     )}
                     {selectedPersonId && (
                         <div>
-                            <h3 className="font-bold text-lg mb-4">
-                                Transações de: {people.find(p => p.id === selectedPersonId)?.name}
-                                <span className="ml-2 text-sm text-gray-500">({people.find(p => p.id === selectedPersonId)?.age} anos)</span>
-                            </h3>
-                            <TransactionTable transactions={transactions.filter(t => t.personId === selectedPersonId)} />
+                            <h3 className="font-bold text-lg mb-4">Transações de: {people.find(p => p.id === selectedPersonId)?.name}</h3>
+                            <TransactionTable
+                                transactions={transactions.filter(t => t.personId === selectedPersonId)}
+                                onDelete={handleDelete}
+                            />
                         </div>
                     )}
                 </div>
             )}
 
-            {/* LISTAR TRANSAÇÕES */}
             {view === 'transactions' && (
                 <div className="bg-white p-6 border rounded shadow">
                     <h2 className="text-xl font-bold mb-4">Todas as Transações</h2>
-                    <TransactionTable transactions={transactions} />
+                    <TransactionTable
+                        transactions={transactions}
+                        onDelete={handleDelete}
+                    />
                 </div>
             )}
         </div>

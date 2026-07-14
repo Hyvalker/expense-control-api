@@ -15,7 +15,7 @@ public interface IPersonRepository
     /// <summary>
     /// Busca uma pessoa pelo seu identificador único (Id).
     /// </summary>
-    Task<Person?> GetByIdAsync(int id);
+    Task<Person> GetByIdAsync(int id);
 
     /// <summary>
     /// Retorna todas as pessoas cadastradas no sistema.
@@ -23,7 +23,8 @@ public interface IPersonRepository
     Task<IEnumerable<Person>> GetAllAsync();
 
     /// <summary>
-    /// Deleta uma pessoa cadastrada no sistema
+    /// Remove uma pessoa cadastrada no sistema
+    /// Essa operação também removerá todas as transações vinculadas à pessoa.
     /// </summary>
     Task DeleteAsync(Person person);
 }

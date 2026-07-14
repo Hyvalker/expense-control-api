@@ -36,7 +36,7 @@ public class TransactionRepository : ITransactionRepository
     }
 
     /// <summary>
-    /// Busca todas as transações no banco de dados e às retorna em uma lista.
+    /// Busca todas as transações no banco de dados e às retorna em uma lista, incluindo os dados da pessoa vinculada.
     /// </summary>
     public async Task<IEnumerable<Transaction>> GetAllAsync()
     {
@@ -46,13 +46,24 @@ public class TransactionRepository : ITransactionRepository
     }
 
     /// <summary>
-    /// Busca todas as transações vinculadas à uma pessoa através do identificador único dessa pessoa.
+    /// Busca todas as transações vinculadas à uma pessoa específica.
     /// </summary>
+    /// <param name="personId">ID da pessoa proprietária das transações.</param>
     public async Task<IEnumerable<Transaction>> GetByPersonIdAsync(int personId)
     {
         return await _context.Transactions
             .Include(t => t.Person)
-            .Where(x => x.PersonId == personId).AsNoTracking().ToListAsync();
+            .Where(x => x.PersonId == personId)
+            .AsNoTracking() // Performance: não rastreia a entidade, pois é apenas leitura
+            .ToListAsync();
     }
     
+    /// <summary>
+    /// Remove uma transação do banco de dados e confirma a transação.
+    /// </summary>
+    public async Task DeleteAsync(Transaction transaction)
+    {
+        _context.Transactions.Remove(transaction);
+        await _context.SaveChangesAsync();
+    }
 }

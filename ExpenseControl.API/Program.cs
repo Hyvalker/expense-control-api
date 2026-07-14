@@ -1,3 +1,4 @@
+using ExpenseControl.API.Middleware;
 using ExpenseControl.Core.Interfaces;
 using ExpenseControl.Core.Services;
 using ExpenseControl.Infrastructure.Data;
@@ -44,6 +45,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors("AllowReactApp");
 

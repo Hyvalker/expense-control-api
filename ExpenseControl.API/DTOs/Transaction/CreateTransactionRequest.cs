@@ -1,5 +1,22 @@
+using System.ComponentModel.DataAnnotations;
 using ExpenseControl.Core.Enums;
 
 namespace ExpenseControl.API.DTOs.Transaction;
 
-public record CreateTransactionRequest(string Description, decimal Amount, TransactionType Type, int PersonId);
+/// <summary>
+/// Objeto de requisição para criar uma nova transação financeira.
+/// </summary>
+public record CreateTransactionRequest(
+    [Required]
+    [StringLength(200)]
+    string Description,
+    
+    [Required]
+    [Range(0.01, double.MaxValue, ErrorMessage = "O valor deve ser maior que zero.")]
+    decimal Amount, 
+    
+    [Required]
+    TransactionType Type, 
+    
+    [Required]
+    int PersonId);
