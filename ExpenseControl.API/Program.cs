@@ -20,7 +20,19 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Obtém o nome do arquivo XML gerado pelo csproj
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    // Combina com o diretório base para encontrar o arquivo
+    var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename);
+    
+    // Adiciona o suporte aos comentários XML no Swagger
+    if (System.IO.File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
+});
 
 // Configuração do CORS
 builder.Services.AddCors(options =>
