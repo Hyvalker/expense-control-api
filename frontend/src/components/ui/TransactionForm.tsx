@@ -55,10 +55,22 @@ export const TransactionForm = ({onSuccess, onCancel}: TransactionFormProps) => 
                 onSuccess();
             }, 1500);
         } catch (err: any) {
-
             const errorData = err.response?.data;
+            
+            let errorMsg = "Erro ao salvar transação.";
 
-            const errorMsg = errorData?.Message || "Erro ao salvar transação.";
+            if (errorData) {
+                if (typeof errorData === 'string') {
+                    errorMsg = errorData;
+                } else if (errorData.errors) {
+                    
+                    const firstKey = Object.keys(errorData.errors)[0];
+                    errorMsg = errorData.errors[firstKey][0];
+                } else if (errorData.title) {
+                  
+                    errorMsg = errorData.title;
+                }
+            }
 
             setMessage({text: errorMsg, type: 'error'});
         }

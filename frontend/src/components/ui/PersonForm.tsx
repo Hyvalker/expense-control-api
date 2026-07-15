@@ -47,9 +47,26 @@ export const PersonForm = ({ onSuccess }: PersonFormProps) => {
             setAge('');
             onSuccess(); 
         } catch (err: any) {
-            // Tenta extrair a mensagem de erro da API, se disponível.
             const errorData = err.response?.data;
-            setMessage({ text: errorData?.Message || "Erro ao salvar pessoa.", type: 'error' });
+
+            let errorMsg = "Erro ao salvar pessoa.";
+
+            if (errorData) {
+                if (typeof errorData === 'string') {
+                    errorMsg = errorData;
+                } else if (errorData.errors) {
+                    // Pega o primeiro erro da lista de erros de validação do .NET
+                    const firstKey = Object.keys(errorData.errors)[0];
+                    errorMsg = errorData.errors[firstKey][0];
+                } else if (errorData.title) {
+                    errorMsg = errorData.title;
+                } else if (errorData.Message) {
+                    // Mantém suporte caso você retorne um objeto customizado em algum lugar
+                    errorMsg = errorData.Message;
+                }
+            }
+
+            setMessage({ text: errorMsg, type: 'error' });
         }
     };
 
