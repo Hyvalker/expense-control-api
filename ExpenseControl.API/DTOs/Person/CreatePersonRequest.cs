@@ -12,6 +12,6 @@ public record CreatePersonRequest(
     [StringLength(100)] 
     string Name,
     
-    [Range(0, 150)] 
+    [Range(0, 150, ErrorMessage = "Limite máximo de 150 anos para cadastro.")] 
     int Age
 );

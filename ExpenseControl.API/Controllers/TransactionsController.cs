@@ -31,29 +31,38 @@ public class TransactionsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<TransactionResponse>> Create(CreateTransactionRequest request)
     {
-        var transaction = new Transaction
+        try
         {
-            Description = request.Description,
-            Amount = request.Amount,
-            Type = request.Type,
-            PersonId = request.PersonId,
-        };
-        
-        await _transactionService.CreateAsync(transaction);
+            var transaction = new Transaction
+            {
+                Description = request.Description,
+                Amount = request.Amount,
+                Type = request.Type,
+                PersonId = request.PersonId,
+            };
 
+            await _transactionService.CreateAsync(transaction);
 
-        // Mapeia o resultado para o DTO de resposta.
-        var response = new TransactionResponse(
-            transaction.Id,
-            transaction.Description,
-            transaction.Amount,
-            transaction.Type,
-            transaction.PersonId,
-            transaction.Person?.Name ?? "Sem Nome");
+            var response = new TransactionResponse(
+                transaction.Id,
+                transaction.Description,
+                transaction.Amount,
+                transaction.Type,
+                transaction.PersonId,
+                transaction.Person?.Name ?? "Sem Nome");
 
-        
-        // O CreatedAtAction retorna a URL para buscar a transação criada.
-        return CreatedAtAction(nameof(Get), new { id = transaction.Id }, response);
+            return CreatedAtAction(nameof(Get), new { id = transaction.Id }, response);
+        }
+        // Captura erros de validação (ex: valor <= 0, descrição vazia, regra de menor de idade)
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        // Captura erros de pessoa não encontrada
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
     /// <summary>

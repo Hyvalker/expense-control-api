@@ -7,12 +7,12 @@ namespace ExpenseControl.API.DTOs.Transaction;
 /// Objeto de requisição para criar uma nova transação financeira.
 /// </summary>
 public record CreateTransactionRequest(
-    [Required]
+    [Required(ErrorMessage = "A descrição da transação é obrigatória.")]
     [StringLength(200)]
     string Description,
     
     [Required]
-    [Range(0.01, double.MaxValue, ErrorMessage = "O valor deve ser maior que zero.")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "O valor da transação deve ser maior que zero.")]
     decimal Amount, 
     
     [Required]
