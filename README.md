@@ -9,10 +9,6 @@ Projeto desenvolvido como solução para um desafio técnico de desenvolvimento 
 
 Sistema de controle de gastos residenciais desenvolvido em **.NET 10 + React + TypeScript**, utilizando os princípios de **Clean Architecture** e boas práticas de desenvolvimento.
 
-## 📖 Visão Geral
-
-O ExpenseControl é um sistema para gerenciamento de gastos residenciais desenvolvido como parte de um desafio técnico.
-
 A aplicação permite o gerenciamento de pessoas e transações financeiras, aplicando regras de negócio específicas e apresentando relatórios consolidados de receitas, despesas e saldo por pessoa e de forma geral.
 
 ## ✨ Funcionalidades
