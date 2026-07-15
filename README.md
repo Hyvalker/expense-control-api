@@ -20,16 +20,18 @@ A aplicação permite o gerenciamento de pessoas e transações financeiras, apl
 - Validação de regras de negócio
 - Relatórios financeiros individuais e consolidados
 - Documentação interativa da API com Swagger
+- Testes unitários implementados para validação de regras de negócio
 
 ## 📂 Estrutura do Projeto
 
 ```text
 ExpenseControl
 │
-├── ExpenseControl.API            # API REST
-├── ExpenseControl.Core           # Regras de negócio
+├── ExpenseControl.API          # API REST
+├── ExpenseControl.Core         # Regras de negócio
 ├── ExpenseControl.Infrastructure # Persistência de dados
-├── frontend                      # React + TypeScript
+├── ExpenseControl.Tests        # Projeto de testes unitários
+├── frontend                    # React + TypeScript
 └── ExpenseControl.sln
 ```
 
@@ -74,6 +76,11 @@ Aplicação React contendo:
 - Pages
 - Hooks
 - Services
+
+## 🧪 Testes Unitários
+
+O projeto inclui testes unitários desenvolvidos com xUnit e Moq, focados na garantia da integridade das regras de negócio críticas, como a validação de restrição de cadastro de receitas para menores de 18 anos.
+
 
 ## 📌 Regras de Negócio
 
@@ -147,18 +154,20 @@ http://localhost:5173
 
 ## 🛠 Tecnologias
 
-| Tecnologia | Finalidade |
-|------------|------------|
-| .NET 10 | Backend |
-| ASP.NET Core | API REST |
-| Entity Framework Core | ORM |
-| SQLite | Banco de Dados |
-| Swagger | Documentação |
-| React | Frontend |
-| TypeScript | Tipagem |
-| Axios | Comunicação HTTP |
-| Vite | Build Tool |
-| Tailwind CSS | Estilização |
+| Tecnologia            | Finalidade              |
+|-----------------------|-------------------------|
+| .NET 10               | Backend                 |
+| ASP.NET Core          | API REST                |
+| Entity Framework Core | ORM                     |
+| SQLite                | Banco de Dados          |
+| Swagger               | Documentação            |
+| xUnit                 | Testes unitários        |
+| Moq                   | Mocking de dependências |
+| React                 | Frontend                |
+| TypeScript            | Tipagem                 |
+| Axios                 | Comunicação HTTP        |
+| Vite                  | Build Tool              |
+| Tailwind CSS          | Estilização             |
 
 ## 📚 Documentação
 
@@ -186,8 +195,8 @@ Este projeto foi desenvolvido como parte de um desafio técnico, buscando demons
 
 ## 🚧 Melhorias Futuras
 
-- Implementação de testes unitários
 - Implementação de autenticação
 - Edição de transações
 - Filtros e ordenação nas consultas
 - Containerização com Docker
+- Expansão da cobertura de testes unitários
