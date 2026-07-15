@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseControl.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseControl.API", "ExpenseControl.API\ExpenseControl.API.csproj", "{9EAE75EC-31FA-4091-B760-3BD41B3C732C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseControl.Tests", "ExpenseControl.Tests\ExpenseControl.Tests.csproj", "{3FBEC3A8-78EF-48F9-A60A-12A8897E9B25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{9EAE75EC-31FA-4091-B760-3BD41B3C732C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EAE75EC-31FA-4091-B760-3BD41B3C732C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EAE75EC-31FA-4091-B760-3BD41B3C732C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FBEC3A8-78EF-48F9-A60A-12A8897E9B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FBEC3A8-78EF-48F9-A60A-12A8897E9B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FBEC3A8-78EF-48F9-A60A-12A8897E9B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FBEC3A8-78EF-48F9-A60A-12A8897E9B25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
